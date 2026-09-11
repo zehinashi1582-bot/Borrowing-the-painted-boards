@@ -103,7 +103,21 @@
   </main>
   <dialog id="recordDialog"><div class="modal-head"><h2 id="modalTitle">塗板を登録</h2><button class="close" id="closeDialog" aria-label="閉じる">×</button></div><form id="recordForm"><input id="recordId" type="hidden"><label id="codeLabel">コード<span class="code-parts" id="codeParts"><select id="codePrefix" required><option value="">Front alphabet</option><option value="B">B</option><option value="NH-A">NH-A</option><option value="NH-B">NH-B</option><option value="NH-C">NH-C</option><option value="NH-D">NH-D</option><option value="PB">PB</option><option value="R">R</option><option value="Y">Y</option><option value="YR">YR</option></select><select id="codeNumber" required><option value="">Numbers</option></select><select id="codeMid"><option value="">Mid alphabet (optional)</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option><option>J</option><option>K</option><option>L</option><option>M</option><option>N</option><option>O</option><option>P</option><option>Q</option><option>R</option><option>S</option><option>T</option><option>U</option><option>V</option><option>W</option><option>X</option><option>Y</option><option>Z</option></select><select id="codeSuffix"><option value="">Rear alphabet (optional)</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option><option>J</option><option>K</option><option>L</option><option>M</option><option>N</option><option>O</option><option>P</option><option>Q</option><option>R</option><option>S</option><option>T</option><option>U</option><option>V</option><option>W</option><option>X</option><option>Y</option><option>Z</option></select></span></label><label id="colorEnInputLabel">カラー名（英語）<input id="colorEn" list="colorEnOptions" placeholder="英語名を入力または選択" required><datalist id="colorEnOptions"></datalist></label><label id="colorEnLoanLabel" class="loan-field">カラー名（英語）<select id="loanColorEn"><option value="">登録済みカラーを選択</option></select></label><label id="colorJaInputLabel">カラー名（日本語）<input id="colorJa" list="colorJaOptions" placeholder="日本語名を入力または選択" required><datalist id="colorJaOptions"></datalist></label><label id="colorJaLoanLabel" class="loan-field">カラー名（日本語）<select id="loanColorJa"><option value="">登録済みカラーを選択</option></select></label><label id="lendDateLabel">借入日<input id="lendDate" type="date"></label><label id="returnDateLabel">返却予定日<input id="returnDate" type="date"></label><label id="statusLabel">ステータス<select id="status"><option>返却済</option><option>借入中</option><option>製作会社へ貸出中</option><option>製作会社から返却済</option></select></label><div class="form-actions"><button type="button" class="outline" id="cancelDialog">キャンセル</button><button class="primary" type="submit">保存する</button></div></form></dialog>
   <div class="toast" id="toast"></div>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCbHKrzy4CfKViCSgCF6rOuidqLuJbfldA",
+      authDomain: "my-work-app-001-29318.firebaseapp.com",
+      databaseURL: "https://my-work-app-001-29318-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "my-work-app-001-29318",
+      storageBucket: "my-work-app-001-29318.firebasestorage.app",
+      messagingSenderId: "1019862097993",
+      appId: "1:1019862097993:web:e4dd58e88763b6ffebdf98"
+    };
+    const firebaseApp = firebase.initializeApp(firebaseConfig);
+    const firebaseDatabase = firebase.database(firebaseApp);
+    const firebaseRecordsRef = firebaseDatabase.ref("paint-board-records");
     const seed = [
       { id: "1", number: "1", code: "P-001", colorEn: "White Pearl", colorJa: "ホワイトパール", lendDate: "2026-06-24", status: "借入中", barcode: "BC-0001" },
       { id: "2", number: "2", code: "P-002", colorEn: "Crystal Black", colorJa: "クリスタルブラック", lendDate: "2026-06-24", status: "返却済", barcode: "BC-0002" },
@@ -111,6 +125,7 @@
       { id: "4", number: "4", code: "P-004", colorEn: "Milan Red", colorJa: "ミランレッド", lendDate: "2026-06-26", status: "利用可能", barcode: "BC-0004" }
     ];
     let records = JSON.parse(localStorage.getItem("paint-board-records") || "null") || seed;
+    let firebaseLoaded = false;
     const $ = (id) => document.getElementById(id);
     const normalize = (value) => String(value ?? "").trim();
     const statusClass = (status) => ({ "借入中":"borrowed", "製作会社へ貸出中":"company-loaned", "返却済":"returned", "製作会社から返却済":"company-returned", "利用可能":"available", "期限超過":"overdue" }[status] || "returned");
@@ -128,7 +143,28 @@
     ensurePrefixOption(); ensureStatusOptions(); $("paintInfoButton").textContent = "＋ 新規塗板登録"; $("paintInfoButton").addEventListener("click", () => setTimeout(() => $("modalTitle").textContent = "塗板新規登録", 0)); $("paintInfoButtonBottom").addEventListener("click", () => { openDialog(); setTimeout(() => $("modalTitle").textContent = "塗板新規登録", 0); });
     function splitCode(code) { const value = String(code || "").trim(); const match = value.match(/^([A-Z]+(?:-[A-D])?)-?(\d{1,3})([A-Z]?)(?:-?([A-Z]))?$/); return match ? ["", match[1], match[2].padStart(2, "0"), match[3] || "", match[4] || ""] : ["", "", "", "", ""]; }
     $("tableBody").addEventListener("click", (event) => { if (event.target.closest("[data-edit]")) setTimeout(() => { $("modalTitle").textContent = "塗板情報編集"; }, 0); });
-    function save() { localStorage.setItem("paint-board-records", JSON.stringify(records)); }
+    function save() {
+      localStorage.setItem("paint-board-records", JSON.stringify(records));
+      if (firebaseLoaded) {
+        firebaseRecordsRef.set(records).catch((error) => console.error("Firebase save failed:", error));
+      }
+    }
+    function loadFromFirebase() {
+      firebaseRecordsRef.once("value").then((snapshot) => {
+        const cloudRecords = snapshot.val();
+        if (Array.isArray(cloudRecords)) {
+          records = cloudRecords;
+          localStorage.setItem("paint-board-records", JSON.stringify(records));
+        } else if (!snapshot.exists()) {
+          firebaseRecordsRef.set(records);
+        }
+        firebaseLoaded = true;
+        render();
+      }).catch((error) => {
+        console.error("Firebase load failed:", error);
+        firebaseLoaded = true;
+      });
+    }
     function currentStatus(item) { const today = new Date().toISOString().slice(0, 10); if (item.status !== "返却済" && item.returnDate && item.returnDate < today) return "期限超過"; return item.status; }
     function updateOverdueStatuses() { let changed = false; records.forEach((item) => { const rawCode = String(item.code || ""); const nhMatch = rawCode.match(/^NH-?(\d+)([A-Z]?)(?:-?([A-Z]))?$/); const bMatch = rawCode.match(/^B-?(\d+)([A-Z]?)(?:-?([A-Z]))?$/); const compactMatch = rawCode.match(/^([A-Z]+)(\d+)([A-Z]?)(?:-?([A-Z]))?$/); const normalizedCode = nhMatch ? `NH-${nhMatch[1]}${nhMatch[2]}${nhMatch[3] ? `-${nhMatch[3]}` : ""}` : bMatch ? `B-${bMatch[1]}${bMatch[2]}${bMatch[3] ? `-${bMatch[3]}` : ""}` : compactMatch ? `${compactMatch[1]}-${compactMatch[2]}${compactMatch[3]}${compactMatch[4] ? `-${compactMatch[4]}` : ""}` : rawCode.replace(/^(NH-[A-D])-/, "$1"); if (normalizedCode !== item.code) { item.code = normalizedCode; changed = true; } if (item.status === "製作会社_返却済") { item.status = "製作会社から返却済"; changed = true; } const correctedColor = japaneseColorForEnglish(item.colorEn); if (correctedColor && item.colorJa !== correctedColor) { item.colorJa = correctedColor; changed = true; } const status = currentStatus(item); if (item.status !== status) { item.status = status; changed = true; } if (item.status === "返却済" && (item.lendDate || item.returnDate)) { item.lendDate = ""; item.returnDate = ""; changed = true; } }); if (changed) save(); }
     function render() {
