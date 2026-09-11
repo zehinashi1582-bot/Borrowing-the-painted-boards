@@ -119,10 +119,43 @@
     const firebaseDatabase = firebase.database(firebaseApp);
     const firebaseRecordsRef = firebaseDatabase.ref("paint-board-records");
     const seed = [
-      { id: "1", number: "1", code: "P-001", colorEn: "White Pearl", colorJa: "ホワイトパール", lendDate: "2026-06-24", status: "借入中", barcode: "BC-0001" },
-      { id: "2", number: "2", code: "P-002", colorEn: "Crystal Black", colorJa: "クリスタルブラック", lendDate: "2026-06-24", status: "返却済", barcode: "BC-0002" },
-      { id: "3", number: "3", code: "P-003", colorEn: "Sonic Gray", colorJa: "ソニックグレー", lendDate: "2026-06-25", status: "借入中", barcode: "BC-0003" },
-      { id: "4", number: "4", code: "P-004", colorEn: "Milan Red", colorJa: "ミランレッド", lendDate: "2026-06-26", status: "利用可能", barcode: "BC-0004" }
+      { id: "1", code: "B-197M", colorEn: "GLINT WAVE BLUE METALLIC", colorJa: "グリント ウェーブ ブルー メタリック", lendDate: "2026-06-04", returnDate: "2026-09-30", status: "借入中", barcode: "62485", modelYear: "2027", modelName: "CB750" },
+      { id: "2", code: "B-198M", colorEn: "GLINT WAVE BLUE METALLIC", colorJa: "グリント ウェーブ ブルー メタリック", lendDate: "2026-06-18", returnDate: "2026-09-11", status: "製作会社から返却済", barcode: "25321", modelYear: "2027", modelName: "CB750" },
+      { id: "3", code: "NH-167M-U", colorEn: "IRON NAIL SILVER METALLIC-U", colorJa: "アイアンネイルシルバーメタリック-U", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "借入中", barcode: "25993", modelYear: "2027", modelName: "CB750" },
+      { id: "4", code: "NH-167M-U", colorEn: "IRON NAIL SILVER METALLIC-U", colorJa: "アイアンネイルシルバーメタリック-U", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "製作会社から返却済", barcode: "25994", modelYear: "2027", modelName: "CB750" },
+      { id: "5", code: "NH-194M-U", colorEn: "HEAVY GRAY METALLIC-U", colorJa: "ヘビーグレーメタリック-U", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "借入中", barcode: "15965", modelYear: "2027", modelName: "CB750" },
+      { id: "6", code: "NH-194M-U", colorEn: "HEAVY GRAY METALLIC-U", colorJa: "ヘビーグレーメタリック-U", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "借入中", barcode: "243", modelYear: "2027", modelName: "CB750" },
+      { id: "7", code: "NH-A30M", colorEn: "DIGITAL SILVER METALLIC", colorJa: "デジタルシルバーメタリック", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "借入中", barcode: "17043", modelYear: "2027", modelName: "CB750" },
+      { id: "8", code: "NH-A30M", colorEn: "DIGITAL SILVER METALLIC", colorJa: "デジタルシルバーメタリック", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "製作会社から返却済", barcode: "59179", modelYear: "2027", modelName: "CB750" },
+      { id: "9", code: "NH-A86M", colorEn: "MAT BALLISTIC BLACK METALLIC", colorJa: "マットバリスティックブラックメタリック", lendDate: "2026-06-02", returnDate: "2026-09-30", status: "借入中", barcode: "67904", modelYear: "2027", modelName: "X-ADV" },
+      { id: "10", code: "NH-A86M", colorEn: "MAT BALLISTIC BLACK METALLIC", colorJa: "マットバリスティックブラックメタリック", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "製作会社から返却済", barcode: "50488", modelYear: "2027", modelName: "X-ADV" },
+      { id: "11", code: "NH-A86M", colorEn: "MAT BALLISTIC BLACK ETALLIC", colorJa: "マットバリスティックブラックメタリック", lendDate: "2026-06-18", returnDate: "2026-09-30", status: "製作会社から返却済", barcode: "23411", modelYear: "2027", modelName: "XL750" },
+      { id: "12", code: "NH-B01", colorEn: "GRAPHITE BLACK", colorJa: "グラファイトブラック", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "借入中", barcode: "25884", modelYear: "2027", modelName: "CB750" },
+      { id: "13", code: "NH-B01", colorEn: "GRAPHITE BLACK", colorJa: "グラファイトブラック", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "借入中", barcode: "10659", modelYear: "2027", modelName: "CB750" },
+      { id: "14", code: "NH-C08M", colorEn: "MAT BETA SILVER METALLIC", colorJa: "マットベータシルバーメタリック", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "製作会社から返却済", barcode: "22092", modelYear: "2027", modelName: "X-ADV" },
+      { id: "15", code: "NH-C08M", colorEn: "MAT BETA SILVER METALLIC", colorJa: "マットベータシルバーメタリック", lendDate: "2026-06-18", returnDate: "2026-09-30", status: "製作会社から返却済", barcode: "61491", modelYear: "2027", modelName: "XL750" },
+      { id: "16", code: "NH-C47P", colorEn: "PEARL DEEP MUD GRAY", colorJa: "パールディープマッドグレー", lendDate: "2026-06-02", returnDate: "2026-09-30", status: "借入中", barcode: "10659", modelYear: "2027", modelName: "NC750X" },
+      { id: "17", code: "NH-C47P", colorEn: "PEARL DEEP MUD GRAY", colorJa: "パールディープマッドグレー", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "製作会社から返却済", barcode: "25867", modelYear: "2027", modelName: "NC750X" },
+      { id: "18", code: "NH-C52M", colorEn: "GUNMETAL BLACK METALLIC", colorJa: "ガンメタルブラックメタリック", lendDate: "2026-06-04", returnDate: "2026-09-30", status: "借入中", barcode: "67895", modelYear: "2027", modelName: "CB750" },
+      { id: "19", code: "NH-C52M", colorEn: "GUNMETAL BLACK METALLIC", colorJa: "ガンメタルブラックメタリック", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "製作会社から返却済", barcode: "25927", modelYear: "2027", modelName: "FORZA750" },
+      { id: "20", code: "NH-C52M", colorEn: "GUNMETAL BLACK METALLIC", colorJa: "ガンメタルブラックメタリック", lendDate: "2026-06-18", returnDate: "2026-09-30", status: "製作会社から返却済", barcode: "65435", modelYear: "2027", modelName: "CB750" },
+      { id: "21", code: "NH-C64M", colorEn: "MAT IRIDIUM GRAY METALLIC", colorJa: "マットイリジウムグレーメタリック", lendDate: "2026-06-18", returnDate: "2026-09-30", status: "製作会社から返却済", barcode: "67537", modelYear: "2027", modelName: "CB750" },
+      { id: "22", code: "NH-C65M", colorEn: "IRIDIUM GRAY METALLIC", colorJa: "イリジウムグレーメタリック", lendDate: "2026-06-18", returnDate: "2026-09-30", status: "借入中", barcode: "62648", modelYear: "2027", modelName: "CB750" },
+      { id: "23", code: "NH-C65M", colorEn: "IRIDIUM GRAY METALLIC", colorJa: "イリジウムグレーメタリック", lendDate: "2026-06-18", returnDate: "2026-09-30", status: "製作会社から返却済", barcode: "23992", modelYear: "2027", modelName: "CB750" },
+      { id: "24", code: "NH-D05", colorEn: "MAT DEEP MUD GRAY", colorJa: "マットディープマッドグレー", lendDate: "2026-06-04", returnDate: "2026-09-30", status: "借入中", barcode: "62858", modelYear: "2027", modelName: "NC750X" },
+      { id: "25", code: "NH-D19M", colorEn: "WOLF SILVER METALLIC", colorJa: "ウルフシルバーメタリック", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "借入中", barcode: "66003", modelYear: "2027", modelName: "CB750" },
+      { id: "26", code: "NH-D19M", colorEn: "WOLF SILVER METALLIC", colorJa: "ウルフシルバーメタリック", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "借入中", barcode: "28049", modelYear: "2027", modelName: "CB750" },
+      { id: "27", code: "PB-417M", colorEn: "MAT JEANS BLUE METALLIC", colorJa: "マットジーンズブルーメタリック", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "借入中", barcode: "22109", modelYear: "2027", modelName: "CB750" },
+      { id: "28", code: "PB-417M", colorEn: "MAT JEANS BLUE METALLIC", colorJa: "マットジーンズブルーメタリック", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "借入中", barcode: "61534", modelYear: "2027", modelName: "CB750" },
+      { id: "29", code: "PB-417M", colorEn: "MAT JEANS BLUE METALLIC", colorJa: "マットジーンズブルーメタリック", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "借入中", barcode: "61536", modelYear: "2027", modelName: "CB750" },
+      { id: "30", code: "R-380", colorEn: "GRAND PRIX RED", colorJa: "グランプリレッド", lendDate: "2026-06-02", returnDate: "2026-09-30", status: "製作会社から返却済", barcode: "なし", modelYear: "2027", modelName: "X-ADV" },
+      { id: "31", code: "R-380", colorEn: "GRAND PRIX RED", colorJa: "グランプリレッド", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "借入中", barcode: "61119", modelYear: "2027", modelName: "X-ADV" },
+      { id: "32", code: "R-380", colorEn: "GRAND PRIX RED", colorJa: "グランプリレッド", lendDate: "2026-06-18", returnDate: "2026-09-30", status: "製作会社から返却済", barcode: "なし", modelYear: "2027", modelName: "CB750" },
+      { id: "33", code: "Y-234", colorEn: "GOLDFINCH YELLOW", colorJa: "ゴールドフィンチイエロー", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "借入中", barcode: "27205", modelYear: "2027", modelName: "CB750" },
+      { id: "34", code: "Y-243", colorEn: "GOLDFINCH YELLOW", colorJa: "ゴールドフィンチイエロー", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "製作会社から返却済", barcode: "27208", modelYear: "2027", modelName: "CB750" },
+      { id: "35", code: "YR-386M", colorEn: "MAT WARM ASH METALLIC", colorJa: "マットウォームアッシュメタリック", lendDate: "2026-06-02", returnDate: "2026-09-30", status: "借入中", barcode: "62632", modelYear: "2027", modelName: "FORZA750" },
+      { id: "36", code: "YR-386M", colorEn: "MAT WARM ASH METALLIC", colorJa: "マットウォームアッシュメタリック", lendDate: "2026-06-11", returnDate: "2026-09-30", status: "製作会社から返却済", barcode: "27719", modelYear: "2027", modelName: "FORZA750" },
+      { id: "37", code: "YR-386M", colorEn: "MAT WARM ASH METALLIC", colorJa: "マットウォームアッシュメタリック", lendDate: "2026-06-18", returnDate: "2026-09-30", status: "製作会社から返却済", barcode: "27716", modelYear: "2027", modelName: "XL750" }
     ];
     let records = JSON.parse(localStorage.getItem("paint-board-records") || "null") || seed;
     let firebaseLoaded = false;
